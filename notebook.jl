@@ -38,6 +38,19 @@ using FileIO, HTTP
 # ╔═╡ 65e51277-e7b3-4473-91ae-4c8524b906e9
 using WAV, MusicProcessing
 
+# ╔═╡ 7d8d6c23-f9a1-4ea3-bd8f-6dfa31ede40a
+md"""# McLeod's Pitch Method
+
+An interactive implementation of the 2005 paper titled ["A Smarter Way To Find Pitch" by Philip McLeod et al](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=60dd4c01f687858a5fbf6c021920c56247bcf2db#page=1.74).
+
+This notebook is meant to be read alongside the paper. It's roughly split into the following parts:
+1. Simple sine wave: we explore the fundamental building blocks using a simple sine wave with no noise as an example.
+2. Real audio file: we then explore the peak picking algorithm using a real piano note sample as the input.
+"""
+
+# ╔═╡ fba1a9fb-afe6-460d-ab41-43281f8ef8f6
+md"## Simple sine wave - data set up"
+
 # ╔═╡ 91cf5fdb-32fc-42a3-8e31-084c3e6e10d3
 @bind frequency PlutoUI.Slider(1:10; default=1)
 
@@ -60,7 +73,8 @@ window_periods = 3
 window_size = Int64(round(frequency * 10 * π * 2 * window_periods))
 
 # ╔═╡ cf319412-86e6-438f-bdf4-ee374dc1955d
-# data with 0.1 interval and some padding
+# data with 0.1 interval
+# a simple sine wave of given frequency
 values = map(
 	x -> sin(frequency * x),
 	0:0.1:2 * num_periods * π
@@ -864,13 +878,14 @@ begin
 end
 
 # ╔═╡ b21724f0-82a5-4cc5-a2fa-c1f10b195a03
-begin
-	fs = 44100
-	t = 0.0:1/fs:prevfloat(1.0)
-	f = 220
-	y = sin.(2pi * f * t) * 0.1
-	wavwrite(y, "example.wav", Fs=fs)
-end
+# uncomment this to create a sample wav with a sine wave with a custom frequency
+# begin
+# 	fs = 44100
+# 	t = 0.0:1/fs:prevfloat(1.0)
+# 	f = 220
+# 	y = sin.(2pi * f * t) * 0.1
+# 	wavwrite(y, "example.wav", Fs=fs)
+# end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -2473,10 +2488,12 @@ version = "1.4.1+2"
 """
 
 # ╔═╡ Cell order:
+# ╟─7d8d6c23-f9a1-4ea3-bd8f-6dfa31ede40a
 # ╠═e803b848-84f0-45b4-a4d8-b49088c36915
+# ╟─fba1a9fb-afe6-460d-ab41-43281f8ef8f6
 # ╠═91cf5fdb-32fc-42a3-8e31-084c3e6e10d3
 # ╟─0156d327-2766-438c-b43e-248b58136cfa
-# ╠═66e74997-aed5-4db3-9e66-fca024f3e00a
+# ╟─66e74997-aed5-4db3-9e66-fca024f3e00a
 # ╠═308b7e30-90ea-4d77-bb9f-cf9bfe4076a1
 # ╟─8e9f6c05-b970-496e-8fc9-e25c18954211
 # ╟─5abddcfc-7391-4fd3-b19a-1395fbd3e3d5
