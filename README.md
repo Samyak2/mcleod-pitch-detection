@@ -9,7 +9,7 @@ Disclaimer: I come with no background in signal processing or audio programming.
 ### Why?
 
 The paper is a little light on the details of some specific functions and algorithms. Some things are hand-waved away. But to implement it, we need those details.
-- A visual exploration of differences between ACF Type I and II, SDF Type I and II and NSDF. In particular, this helped me see how NSDF "normalizes" the SDF
+- A visual exploration of differences between ACF Type I and II, SDF Type I and II and NSDF. In particular, this helped me see how NSDF "normalizes" the SDF.
 - An explanation of how Power Spectral Density comes into the picture and how it's calculated.
 - A derivation (thanks to Pluto.jl's LaTeX support) of `m(𝜏)` given `m(𝜏 - 1)`. This is hand-waved away in the paper - described in one big sentence light on details.
 - Details on parabolic interpolation, along with a visualization of it.
