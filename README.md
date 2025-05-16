@@ -18,6 +18,6 @@ The paper is a little light on the details of some specific functions and algori
 
 I would recommend implementing the paper yourself using the approach I took. Julia is a great language for implementing papers - you can write formulas almost one-to-one with only a few changes. Pluto.jl makes it even better by providing an interactive environment, LaTeX support (so you can derive equations right next to the function itself) and built-in package management.
 
-You could also run this notebook yourself and explore specific parts of the paper that you had trouble with.
+You could also run this notebook (`index.jl`) yourself using Pluto.jl and explore specific parts of the paper that you had trouble with.
 
 In any case, I'll be using this as a reference implementation of MPM.
