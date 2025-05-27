@@ -1,5 +1,6 @@
 services:
   web:
     build: .
+    restart: unless-stopped
     ports:
       - "2345:2345"
