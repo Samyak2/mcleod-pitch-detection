@@ -2,3 +2,7 @@
 /example.wav
 # output directory for HTML exports
 /web
+
+# nix
+.direnv
+.envrc

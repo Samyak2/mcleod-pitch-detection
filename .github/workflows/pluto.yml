@@ -55,21 +55,12 @@ jobs:
 
                   import PlutoSliderServer
 
-                  PlutoSliderServer.github_action(".";
+                  PlutoSliderServer.github_action("notebooks";
                     Export_cache_dir="pluto_state_cache",
                     Export_baked_notebookfile=false,
                     Export_baked_state=false,
                     Export_output_dir="web",
                   )'
-
-
-            - name: Deploy to gh-pages
-              uses: JamesIves/github-pages-deploy-action@releases/v4
-              with:
-                  token: ${{ secrets.GITHUB_TOKEN }}
-                  branch: gh-pages
-                  folder: .
-                  single-commit: true
 
             - name: Deploy to Cloudflare pages
               uses: cloudflare/wrangler-action@v3
