@@ -19,7 +19,7 @@ interface Env {
 	STATIC_SITE_URL?: string;
 }
 
-const MAIN_SERVER = 'http://localhost:1235';
+const MAIN_SERVER = 'https://mcleod-dynamic.samyak.me/';
 const STATIC_FALLBACK = 'https://mcleod-pitch-detection.pages.dev/';
 const HEALTH_CHECK_TIMEOUT = 1000;
 
