@@ -496,8 +496,6 @@ Resource(url)
 
 # ╔═╡ fd6b9dfb-53b1-4269-a179-42ff58b1b9dd
 audio_raw, sample_rate, _, _ = load(HTTP.URI(url))
-# audio_raw, sample_rate, _, _ = load("/Users/samyak/Downloads/A4_2.wav")
-# audio_raw, sample_rate, _, _ = load("example.wav")
 
 # ╔═╡ 785e5b03-5486-4c57-8130-8aabfdb89993
 audio_mono = mono(audio_raw)[10000:end]
@@ -532,10 +530,8 @@ Let's try auto-correlation on it."
 plot(autocorr_fast(audio_mono[1:window_size_audio]))
 
 # ╔═╡ 12c5ae51-fe2d-4758-916b-e8d8f54db529
+# initial estimate of frequency based on just the autocorrelation
 sample_rate / (argmax(autocorr_fast(audio_mono[1:window_size_audio])[30:end]) + 30 - 1)
-
-# ╔═╡ 6cc5875a-0999-429f-8e06-14d747311c12
-# plot(τ -> autocorr2(τ, audio_mono, 1, window_size_audio), 0:window_size_audio;)
 
 # ╔═╡ ebb568ff-b3df-4f79-8eb1-5b0fb9e9dbf9
 md"We see at least two frequencies in there"
@@ -912,7 +908,7 @@ WAV = "~1.2.0"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.11.1"
+julia_version = "1.11.5"
 manifest_format = "2.0"
 project_hash = "4aa43c34434c9ae09c3aec8547dc6a1370cc082d"
 
@@ -1667,7 +1663,7 @@ version = "0.3.27+1"
 [[deps.OpenLibm_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "05823500-19ac-5b8b-9628-191a04bc5112"
-version = "0.8.1+2"
+version = "0.8.5+0"
 
 [[deps.OpenSSL]]
 deps = ["BitFlags", "Dates", "MozillaCACerts_jll", "OpenSSL_jll", "Sockets"]
@@ -2573,7 +2569,6 @@ version = "1.4.1+2"
 # ╟─268b6cf5-0cc7-4282-afcb-151fa65c6acf
 # ╠═aae1b32b-8f2b-46a7-9268-c25e2293bf02
 # ╠═12c5ae51-fe2d-4758-916b-e8d8f54db529
-# ╠═6cc5875a-0999-429f-8e06-14d747311c12
 # ╟─ebb568ff-b3df-4f79-8eb1-5b0fb9e9dbf9
 # ╠═a3ad1215-b1a8-4120-b7f1-d73d79800ffd
 # ╠═ca621e88-2f04-4392-a5c6-5731e129a926
