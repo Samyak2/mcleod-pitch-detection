@@ -51,40 +51,38 @@ This notebook is meant to be read alongside the paper. It's roughly split into t
 # ╔═╡ fba1a9fb-afe6-460d-ab41-43281f8ef8f6
 md"## Simple sine wave - data set up"
 
-# ╔═╡ 91cf5fdb-32fc-42a3-8e31-084c3e6e10d3
-@bind frequency PlutoUI.Slider(1:10; default=1)
-
-# ╔═╡ 0156d327-2766-438c-b43e-248b58136cfa
-frequency
-
-# ╔═╡ 66e74997-aed5-4db3-9e66-fca024f3e00a
-md"Frequency in number of samples is $(round(frequency * 10 * π * 2; digits=2))"
-
 # ╔═╡ 308b7e30-90ea-4d77-bb9f-cf9bfe4076a1
-@bind num_periods PlutoUI.Slider(2:20; default=10)
+num_samples_per_period = π * 100
 
-# ╔═╡ 8e9f6c05-b970-496e-8fc9-e25c18954211
-num_periods
+# ╔═╡ 2d5c45fa-2777-40ad-8c55-e374cb469296
+num_periods = 10
 
 # ╔═╡ 5abddcfc-7391-4fd3-b19a-1395fbd3e3d5
-window_periods = 3
+@bind window_periods PlutoUI.Slider(1:5; default=3)
+
+# ╔═╡ 8c9ef040-fd4f-4513-97c3-22bd6cff15db
+md"Window size in periods: $(window_periods)"
 
 # ╔═╡ a694da85-365f-4774-a17e-83d4b986f69d
-window_size = Int64(round(frequency * 10 * π * 2 * window_periods))
+window_size = Int64(round(window_periods * num_samples_per_period))
 
 # ╔═╡ cf319412-86e6-438f-bdf4-ee374dc1955d
-# data with 0.1 interval
-# a simple sine wave of given frequency
+# a simple sine wave of frequency = 1
 values = map(
-	x -> sin(frequency * x),
-	0:0.1:2 * num_periods * π
+	x -> sin(x),
+	range(
+		0, 2 * π * num_periods;
+		length=Int64(round(num_samples_per_period*num_periods))
+	)
 )
 
 # ╔═╡ 113aea2a-f1f0-48b6-8b52-bb5a5c156fba
-full_periods = map(x -> 2 * 10π * x, 0:num_periods)
+# this array is used to show the vertical lines in the full graphs below
+full_periods = map(x -> num_samples_per_period * x, 0:num_periods)
 
 # ╔═╡ 760e0e83-ca35-43e5-a5fd-e4855ce456ea
-periods = map(x -> 2 * 10π * x, 0:window_periods)
+# this array is used to show the vertical lines in the window graphs below
+periods = map(x -> num_samples_per_period * x, 0:window_periods)
 
 # ╔═╡ 2e28b639-6170-48fe-bab9-01ab420d5b51
 begin
@@ -241,7 +239,7 @@ md"Step 1: zero pad the window by w=$(w)"
 
 # ╔═╡ 52c07508-5aa0-4abb-ae3b-130b5690a10d
 padded_values = map(
-	x -> sin(frequency * x),
+	x -> sin(x),
 	[window_values; fill(0.0, w)]
 )
 
@@ -488,8 +486,16 @@ md"## Peak picking algorithm"
 # ╔═╡ 8f065ce4-550b-4dde-80e5-f37cc272e1dc
 md"""Let's take a real audio sample for this one. It's a piano note. Specifically A3, which has a fundamental frequency of 220Hz."""
 
-# ╔═╡ eb5280ac-bbf6-4637-bc13-6e6a0e0e0c1e
-url = "https://github.com/parisjava/wav-piano-sound/raw/refs/heads/master/wav/a1.wav"
+# ╔═╡ 1f903cf1-320c-4b15-9ace-902161c5b469
+@bind selected Select([
+	("https://github.com/parisjava/wav-piano-sound/raw/refs/heads/master/wav/a1.wav", 220.0) => "A3",
+	("https://github.com/parisjava/wav-piano-sound/raw/refs/heads/master/wav/b1.wav", 246.94) => "B3",
+	("https://github.com/parisjava/wav-piano-sound/raw/refs/heads/master/wav/c1.wav", 130.81) => "C3",
+	("https://github.com/parisjava/wav-piano-sound/raw/refs/heads/master/wav/d1.wav", 146.83) => "D3"
+])
+
+# ╔═╡ af6cdc3c-0095-4042-aa7c-2805c200bcb2
+url, actual_frequency = selected
 
 # ╔═╡ fb0df150-8948-4822-9893-17e30ae1d7a0
 Resource(url)
@@ -529,9 +535,17 @@ Let's try auto-correlation on it."
 # ╔═╡ aae1b32b-8f2b-46a7-9268-c25e2293bf02
 plot(autocorr_fast(audio_mono[1:window_size_audio]))
 
-# ╔═╡ 12c5ae51-fe2d-4758-916b-e8d8f54db529
-# initial estimate of frequency based on just the autocorrelation
-sample_rate / (argmax(autocorr_fast(audio_mono[1:window_size_audio])[30:end]) + 30 - 1)
+# ╔═╡ cc01b2ac-0e96-4450-803a-06640ac19fe8
+begin
+	raw_estimate = sample_rate / (argmax(autocorr_fast(audio_mono[1:window_size_audio])[30:end]) + 30 - 1)
+	md"""
+	Initial estimate based on just the auto-correlation: $(round(Float64(raw_estimate); digits=2))Hz
+	
+	Actual frequency: $(actual_frequency)Hz
+
+	Error: $(round(Float64((abs(raw_estimate-actual_frequency))); digits=2))Hz
+	"""
+end
 
 # ╔═╡ ebb568ff-b3df-4f79-8eb1-5b0fb9e9dbf9
 md"We see at least two frequencies in there"
@@ -786,7 +800,9 @@ pitch_frequency = sample_rate / τ
 # ╔═╡ 41b203c3-c78d-40a6-956f-7f60d7fcf558
 md"The frequency of the note played in the original sound is $(round(pitch_frequency; digits=2))Hz
 
-This is a bit off from the actual frequency of 220Hz. Why?
+This is a bit off from the actual frequency of $(actual_frequency)Hz.
+
+Error: $(round(abs(actual_frequency - pitch_frequency); digits=2))Hz
 
 ---"
 
@@ -861,7 +877,16 @@ end
 start
 
 # ╔═╡ 2a6f509a-a75b-4dd9-8b7d-67f1d22e8700
-mcleod_pitch_method(audio_mono[start : start + window_size_audio - 1], sample_rate)
+calculated_freq = mcleod_pitch_method(audio_mono[start : start + window_size_audio - 1], sample_rate)
+
+# ╔═╡ 718d3959-eca7-4a91-af3b-646ade57403e
+md"
+MPM frequency: $(round(calculated_freq; digits=2))Hz
+
+Actual frequency: $(actual_frequency)Hz
+
+Error: $(round(abs(calculated_freq - actual_frequency); digits=2))Hz
+"
 
 # ╔═╡ 57643ef5-5170-4c5e-a296-275c09d64570
 begin
@@ -2487,12 +2512,10 @@ version = "1.4.1+2"
 # ╟─7d8d6c23-f9a1-4ea3-bd8f-6dfa31ede40a
 # ╠═e803b848-84f0-45b4-a4d8-b49088c36915
 # ╟─fba1a9fb-afe6-460d-ab41-43281f8ef8f6
-# ╠═91cf5fdb-32fc-42a3-8e31-084c3e6e10d3
-# ╟─0156d327-2766-438c-b43e-248b58136cfa
-# ╟─66e74997-aed5-4db3-9e66-fca024f3e00a
-# ╠═308b7e30-90ea-4d77-bb9f-cf9bfe4076a1
-# ╟─8e9f6c05-b970-496e-8fc9-e25c18954211
-# ╟─5abddcfc-7391-4fd3-b19a-1395fbd3e3d5
+# ╟─308b7e30-90ea-4d77-bb9f-cf9bfe4076a1
+# ╟─2d5c45fa-2777-40ad-8c55-e374cb469296
+# ╠═5abddcfc-7391-4fd3-b19a-1395fbd3e3d5
+# ╟─8c9ef040-fd4f-4513-97c3-22bd6cff15db
 # ╟─a694da85-365f-4774-a17e-83d4b986f69d
 # ╠═cf319412-86e6-438f-bdf4-ee374dc1955d
 # ╠═113aea2a-f1f0-48b6-8b52-bb5a5c156fba
@@ -2554,7 +2577,8 @@ version = "1.4.1+2"
 # ╠═e9c87223-73ce-4ce8-b19f-27d3c5103b58
 # ╟─78905af5-403d-4fc1-be2d-50d9e8307e85
 # ╟─8f065ce4-550b-4dde-80e5-f37cc272e1dc
-# ╠═eb5280ac-bbf6-4637-bc13-6e6a0e0e0c1e
+# ╠═1f903cf1-320c-4b15-9ace-902161c5b469
+# ╠═af6cdc3c-0095-4042-aa7c-2805c200bcb2
 # ╠═fb0df150-8948-4822-9893-17e30ae1d7a0
 # ╠═2727c889-166f-4ff3-a66f-9ebf80069c08
 # ╠═65e51277-e7b3-4473-91ae-4c8524b906e9
@@ -2568,7 +2592,7 @@ version = "1.4.1+2"
 # ╠═e8a9f572-c9a9-46d9-99c6-3f214d8e7639
 # ╟─268b6cf5-0cc7-4282-afcb-151fa65c6acf
 # ╠═aae1b32b-8f2b-46a7-9268-c25e2293bf02
-# ╠═12c5ae51-fe2d-4758-916b-e8d8f54db529
+# ╠═cc01b2ac-0e96-4450-803a-06640ac19fe8
 # ╟─ebb568ff-b3df-4f79-8eb1-5b0fb9e9dbf9
 # ╠═a3ad1215-b1a8-4120-b7f1-d73d79800ffd
 # ╠═ca621e88-2f04-4392-a5c6-5731e129a926
@@ -2604,12 +2628,13 @@ version = "1.4.1+2"
 # ╠═e15a3adb-6b83-4134-9742-61d2acba7429
 # ╟─77545348-f9ff-457a-bc0d-42de0269f905
 # ╠═47cdb2bf-cd51-4ffb-bee4-4a791875e388
-# ╟─41b203c3-c78d-40a6-956f-7f60d7fcf558
+# ╠═41b203c3-c78d-40a6-956f-7f60d7fcf558
 # ╟─5d8bda3f-da5c-4452-b9a8-fa7790645fb2
 # ╠═97aab285-29c5-458d-b3cb-bf6ff017067f
 # ╠═7c69fdff-c7a8-4f91-bf3e-716cd9b35600
 # ╠═28c7cd55-6470-47ac-a71c-ece968cc012e
 # ╠═2a6f509a-a75b-4dd9-8b7d-67f1d22e8700
+# ╟─718d3959-eca7-4a91-af3b-646ade57403e
 # ╠═57643ef5-5170-4c5e-a296-275c09d64570
 # ╠═b21724f0-82a5-4cc5-a2fa-c1f10b195a03
 # ╟─00000000-0000-0000-0000-000000000001
