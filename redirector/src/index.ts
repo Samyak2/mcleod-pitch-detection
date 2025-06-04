@@ -43,12 +43,26 @@ export default {
 
 			// If main server responds successfully, return its response
 			if (mainServerResponse.ok) {
-				return mainServerResponse;
+				let [body, body2] = mainServerResponse.body?.tee()!;
+				let reader = body.getReader();
+				let value = (await reader?.read())?.value;
+				let string = new TextDecoder().decode(value);
+				if (string.includes("<h1>Notebooks</h1>")) {
+					throw new Error("server is still loading. falling back to static site");
+				}
+				reader?.releaseLock();
+				await body.cancel();
+				const response = new Response(body2, {
+					status: mainServerResponse.status,
+					statusText: mainServerResponse.statusText,
+					headers: mainServerResponse.headers,
+				});
+				return response;
 			}
 
 			console.log(`Main server returned ${mainServerResponse.status}, falling back to static site`);
 		} catch (error) {
-			console.log(`Main server failed: ${error instanceof Error ? error.message : 'Unknown error'}, falling back to static site`);
+			console.log(`Main server failed: ${error instanceof Error ? error.message : 'Unknown error'}, falling back to static site`, error);
 		}
 
 		// Fallback to static site
