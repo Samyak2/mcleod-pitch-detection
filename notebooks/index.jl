@@ -33,10 +33,7 @@ using Plots, PlutoUI
 using FFTW
 
 # ╔═╡ 2727c889-166f-4ff3-a66f-9ebf80069c08
-using FileIO, HTTP
-
-# ╔═╡ 65e51277-e7b3-4473-91ae-4c8524b906e9
-using WAV, MusicProcessing
+using FileIO, HTTP, WAV, MusicProcessing
 
 # ╔═╡ 7d8d6c23-f9a1-4ea3-bd8f-6dfa31ede40a
 md"""# McLeod's Pitch Method
@@ -49,6 +46,9 @@ This notebook is meant to be read alongside the paper. It's roughly split into t
 1. Simple sine wave: we explore the fundamental building blocks using a simple sine wave with no noise as an example.
 2. Real audio file: we then explore the peak picking algorithm using a real piano note sample as the input.
 """
+
+# ╔═╡ de2f66d3-97b6-41a6-909b-aefab8a28010
+TableOfContents()
 
 # ╔═╡ fba1a9fb-afe6-460d-ab41-43281f8ef8f6
 md"## Simple sine wave - data set up"
@@ -499,7 +499,7 @@ md"""Let's take a real audio sample for this one. It's a piano note. Specificall
 # ╔═╡ af6cdc3c-0095-4042-aa7c-2805c200bcb2
 url, actual_frequency = selected
 
-# ╔═╡ fb0df150-8948-4822-9893-17e30ae1d7a0
+# ╔═╡ 28e84087-b71c-42f1-948a-18ad6c376117
 Resource(url)
 
 # ╔═╡ fd6b9dfb-53b1-4269-a179-42ff58b1b9dd
@@ -1297,10 +1297,10 @@ uuid = "78b55507-aeef-58d4-861c-77aaff3498b1"
 version = "0.21.0+0"
 
 [[deps.Git]]
-deps = ["Git_jll"]
-git-tree-sha1 = "04eff47b1354d702c3a85e8ab23d539bb7d5957e"
+deps = ["Git_jll", "JLLWrappers", "OpenSSH_jll"]
+git-tree-sha1 = "2230a9cc32394b11a3b3aa807a382e3bbab1198c"
 uuid = "d7ba0133-e1db-5d97-8f8c-041e4b3a1eb2"
-version = "1.3.1"
+version = "1.4.0"
 
 [[deps.Git_jll]]
 deps = ["Artifacts", "Expat_jll", "JLLWrappers", "LibCURL_jll", "Libdl", "Libiconv_jll", "OpenSSL_jll", "PCRE2_jll", "Zlib_jll"]
@@ -1691,6 +1691,12 @@ version = "0.3.27+1"
 deps = ["Artifacts", "Libdl"]
 uuid = "05823500-19ac-5b8b-9628-191a04bc5112"
 version = "0.8.5+0"
+
+[[deps.OpenSSH_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "OpenSSL_jll", "Zlib_jll"]
+git-tree-sha1 = "cb7acd5d10aff809b4d0191dfe1956c2edf35800"
+uuid = "9bd350c2-7e96-507f-8002-3f2e150b4e1b"
+version = "10.0.1+0"
 
 [[deps.OpenSSL]]
 deps = ["BitFlags", "Dates", "MozillaCACerts_jll", "OpenSSL_jll", "Sockets"]
@@ -2513,6 +2519,7 @@ version = "1.4.1+2"
 # ╔═╡ Cell order:
 # ╟─7d8d6c23-f9a1-4ea3-bd8f-6dfa31ede40a
 # ╠═e803b848-84f0-45b4-a4d8-b49088c36915
+# ╠═de2f66d3-97b6-41a6-909b-aefab8a28010
 # ╟─fba1a9fb-afe6-460d-ab41-43281f8ef8f6
 # ╟─308b7e30-90ea-4d77-bb9f-cf9bfe4076a1
 # ╟─2d5c45fa-2777-40ad-8c55-e374cb469296
@@ -2579,11 +2586,10 @@ version = "1.4.1+2"
 # ╠═e9c87223-73ce-4ce8-b19f-27d3c5103b58
 # ╟─78905af5-403d-4fc1-be2d-50d9e8307e85
 # ╟─8f065ce4-550b-4dde-80e5-f37cc272e1dc
-# ╠═1f903cf1-320c-4b15-9ace-902161c5b469
-# ╠═af6cdc3c-0095-4042-aa7c-2805c200bcb2
-# ╠═fb0df150-8948-4822-9893-17e30ae1d7a0
+# ╟─1f903cf1-320c-4b15-9ace-902161c5b469
+# ╟─af6cdc3c-0095-4042-aa7c-2805c200bcb2
+# ╠═28e84087-b71c-42f1-948a-18ad6c376117
 # ╠═2727c889-166f-4ff3-a66f-9ebf80069c08
-# ╠═65e51277-e7b3-4473-91ae-4c8524b906e9
 # ╠═fd6b9dfb-53b1-4269-a179-42ff58b1b9dd
 # ╠═785e5b03-5486-4c57-8130-8aabfdb89993
 # ╟─768a1d2a-a091-4276-a0fa-31c1841e70e9
