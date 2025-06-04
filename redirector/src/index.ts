@@ -21,7 +21,8 @@ interface Env {
 
 const MAIN_SERVER = 'https://mcleod-dynamic.samyak.me';
 const STATIC_FALLBACK = 'https://mcleod-pitch-detection.pages.dev';
-const HEALTH_CHECK_TIMEOUT = 1000;
+const DEFAULT_ROUTE_HEALTH_CHECK_TIMEOUT = 1000;
+const STATE_REQUEST_ROUTE_HEALTH_CHECK_TIMEOUT = 5000;
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -38,7 +39,7 @@ export default {
 					headers: request.headers,
 					body: request.method !== 'GET' && request.method !== 'HEAD' ? request.body : undefined,
 				},
-				HEALTH_CHECK_TIMEOUT
+				url.pathname.includes("staterequest") ? STATE_REQUEST_ROUTE_HEALTH_CHECK_TIMEOUT : DEFAULT_ROUTE_HEALTH_CHECK_TIMEOUT
 			);
 
 			// If main server responds successfully, return its response
