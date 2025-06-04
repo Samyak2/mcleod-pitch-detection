@@ -43,6 +43,8 @@ md"""# McLeod's Pitch Method
 
 An interactive implementation of the 2005 paper titled ["A Smarter Way To Find Pitch" by Philip McLeod et al](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=60dd4c01f687858a5fbf6c021920c56247bcf2db#page=1.74).
 
+The source code for this notebook can be found in [this GitHub repository](https://github.com/Samyak2/mcleod-pitch-detection).
+
 This notebook is meant to be read alongside the paper. It's roughly split into the following parts:
 1. Simple sine wave: we explore the fundamental building blocks using a simple sine wave with no noise as an example.
 2. Real audio file: we then explore the peak picking algorithm using a real piano note sample as the input.

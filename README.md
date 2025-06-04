@@ -4,6 +4,8 @@ In the 2005 paper titled ["A Smarter Way To Find Pitch" by Philip McLeod et al](
 
 In this [Pluto.jl notebook](https://plutojl.org/), I have attempted to implement the algorithm one step at a time. At every step, I plot the outputs and explore various inputs to better understand the fundamentals.
 
+[Here](https://mcleod.samyak.me/) is a live deployment of the notebook (it's interactive if the server is up. If not, you can still access a static version of it).
+
 Disclaimer: I come with no background in signal processing or audio programming. This is my attempt at understanding these concepts. I welcome any feedback. Please open an issue or reach out to me directly.
 
 ### Why?
